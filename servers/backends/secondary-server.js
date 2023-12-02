@@ -1,15 +1,22 @@
 // Importing the express module
 const express = require("express");
 const expressWs = require("express-ws");
+const path = require("path");
 
 // Creating an instance of express
 const app = express();
+app.use(express.static(path.join(__dirname, "static")));
 expressWs(app);
 
 const serverName = "secondary";
 // Define a route
 app.get("/", (req, res) => {
   res.send({ status: "ok", message: `Hello World from ${serverName} server!` });
+});
+
+app.get("*", function (req, res) {
+  console.error(`404: ${req.originalUrl}`);
+  res.sendFile(path.join(__dirname, "static", "custom_404.html"));
 });
 
 app.ws("/ws", (ws, req) => {
