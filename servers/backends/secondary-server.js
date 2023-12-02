@@ -14,11 +14,6 @@ app.get("/", (req, res) => {
   res.send({ status: "ok", message: `Hello World from ${serverName} server!` });
 });
 
-app.get("*", function (req, res) {
-  console.error(`404: ${req.originalUrl}`);
-  res.sendFile(path.join(__dirname, "static", "custom_404.html"));
-});
-
 app.ws("/ws", (ws, req) => {
   console.log(`WebSocket  for "${serverName}" connection established`);
 
@@ -32,6 +27,11 @@ app.ws("/ws", (ws, req) => {
   ws.on("close", () => {
     console.log(`WebSocket for "${serverName}" connection closed`);
   });
+});
+
+app.get("*", function (req, res) {
+  console.error(`404: ${req.originalUrl}`);
+  res.sendFile(path.join(__dirname, "static", "custom_404.html"));
 });
 
 // Set up the server to listen on port 4001

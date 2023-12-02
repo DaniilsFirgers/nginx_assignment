@@ -7,11 +7,15 @@ const httpsAgent = new https.Agent({
 const ws = new WebSocket("wss://localhost:8080/ws", { agent: httpsAgent });
 let messageInterval;
 
-ws.addEventListener("open", (event) => {
+ws.addEventListener("open", async (event) => {
   console.log("WebSocket connection opened");
-  messageInterval = setInterval(() => {
-    sendMessage();
-  }, 400);
+  await new Promise((res, rej) => {
+    for (let i = 1; i <= 5; i++) {
+      sendMessage();
+    }
+    res();
+  });
+  ws.close();
 });
 
 ws.addEventListener("message", (event) => {
